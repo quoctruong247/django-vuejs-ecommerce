@@ -1,0 +1,6 @@
+pip install django
+pip install stripe
+pip install razorpay
+pip install paypal-checkout-serversdk
+pip install --pre xhtml2pdf
+pip install jsonfield

@@ -1,0 +1,109 @@
+{% load static %}
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+        integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/logo_favicon.png' %}" type="image/gif">
+    <title>{% block title %} {{title}}{% endblock title %}</title>
+    <meta property="og:image" content="{% static 'images/large_logo.jpg' %}">
+    <meta property="og:image:secure_url" content="{% static 'images/large_logo.jpg' %}">
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="284" />
+    <meta property="og:image:height" content="202" />
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+
+<body class="offMenu">
+    <header class="sticky-top">{% include 'header.html' %}</header>
+    
+    <section class="content">
+
+        {% block content %}{% endblock %}
+
+    </section>
+    <section>
+        <div class="container-fluid newsletter-wrapper bt-3">
+            <div class="row">
+                <div class="col-sm-6 offset-3 d-lg-block d-none">
+                    {% include 'parts/newsletter.html' %}
+                </div>
+                <div class="col-sm-6 d-lg-none d-block">
+                    {% include 'parts/newsletter.html' %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>{% include 'footer.html' %}</footer>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+
+    <script src="https://unpkg.com/vuex@3.5.1/dist/vuex.js"></script>
+
+    <script>
+        var store = new Vuex.Store({
+            state: {
+              numItems: {{ cart.get_total_length }},
+              totalCost: {{ cart.get_total_cost }}
+              
+          },
+        mutations: {
+            increment(state, quantity){
+                state.numItems += quantity
+            },
+            changeTotalCost(state, newCost){
+                state.totalCost += newCost
+            }
+        }
+      });
+
+        var numberCartApp = new Vue({
+            el: '#numberCartApp',
+            delimiters: ['[[', ']]'],
+            store: store,
+
+            computed: {
+                numItems: function () {
+                    return store.state.numItems
+                }
+            }
+        });
+
+        /*  Stop / Start carousel autoplay */
+        $('.btn-customized').on('click', function () {
+
+            if (!$(this).hasClass('paused')) {
+                $('.carousel').carousel('pause');
+                $('.btn-customized').toggleClass('paused');
+                $('.btn-customized i').removeClass('fa-pause').addClass('fa-play');
+                $(this).blur();
+            }
+            else {
+                $('.carousel').carousel('cycle');
+                $('.btn-customized').toggleClass('paused');
+                $('.btn-customized i').removeClass('fa-play').addClass('fa-pause');
+                $(this).blur();
+            }
+
+        });
+
+
+    </script>
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
+
+</html>

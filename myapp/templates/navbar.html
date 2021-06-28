@@ -1,0 +1,161 @@
+<!-- offcanvas panel -->
+<aside class="offcanvas" id="my_offcanvas1">
+	<header class="p-4 bg-light1 border-bottom">
+		<button class="btn btn-outline-danger btn-close"> &times Close </button>
+		<h6 class="mb-0">TSDI Menu </h6>
+	</header>
+	<nav class="list-group list-group-flush">
+		
+    {% for category in menu_categories %}
+      {% if not category.children.all %}
+      <a href="{% url 'category_detail' category.slug %}" class="list-group-item">{{category.name}}</a>
+      {% else %}
+      <li class="nav-link dropdown" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125);left: -4%;width: 104%;">
+        <a class="nav-link" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+           &nbsp;{{ category.name }} <i class="fas fa-chevron-right" style="float: right;"></i>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <header class="p-4 bg-light1 border-bottom">
+            <h5 class="mb-0"><a href="{% url 'category_detail' category.slug %}">{{category.name}}</a></h5>
+          </header>
+          <div class="container">
+            {% for subcategory in category.children.all %}
+              {% if not subcategory.children.all %}
+              <div style="width: 33.3%; float: left;">
+                <a class="dropdown-item" href="{% url 'category_detail' subcategory.slug %}" style="font-size: 14px; padding: 10px;font-weight: bold; ">{{ subcategory.name }}</a>
+              </div>
+              {% else %}
+                
+                  <div style="width: 33.3%; float: left;">
+                  <a href="{% url 'category_detail' subcategory.slug %}" class="nav-link dropdown" style="font-size: 14px; padding: 10px 0px;font-weight: bold;">{{ subcategory.name }} </a>
+                  
+                    {%for sub in subcategory.children.all %}
+                      <p><a href="{% url 'category_detail' sub.slug %}"><small style="color: #6d6e71;">{{sub.name}}</small></a></p>
+                    {% endfor %}
+                  </div>
+                
+              {% endif %}
+              {% if forloop.counter == 6 or forloop.counter == 9 %}
+                  <div style="clear: both;"></div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </li>
+      {%endif%}
+    {%endfor%}
+	</nav>
+</aside>
+
+
+<button class="navbar-toggler dropdown" data-trigger="#my_offcanvas1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <i class="fas fa-bars text-white"></i>
+</button>
+
+<script type="text/javascript">
+  /// some script
+  
+  // jquery ready start
+  $(document).ready(function() {
+    // jQuery code
+  
+      $("[data-trigger]").on("click", function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          var offcanvas_id =  $(this).attr('data-trigger');
+          $(offcanvas_id).toggleClass("show");
+          $('body').toggleClass("offcanvas-active");
+          $(".screen-overlay").toggleClass("show");
+  
+      }); 
+  
+  
+       // Close menu when pressing ESC
+      $(document).on('keydown', function(event) {
+          if(event.keyCode === 27) {
+             $(".offcanvas").removeClass("show");
+             $("body").removeClass("overlay-active");
+          }
+      });
+  
+      $(".btn-close, .offMenu").click(function(e){
+        $(".screen-overlay").removeClass("show");
+          $(".offcanvas").removeClass("show");
+          $("body").removeClass("offcanvas-active");
+  
+  
+      }); 
+    
+  }); // jquery end
+  </script>
+  
+  <style type="text/css">
+  
+  
+  .offcanvas-active{
+    overflow:hidden;
+  }
+  
+  .screen-overlay {
+    width:0%;
+    height: 100%;
+    z-index: 30;
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity:0;
+    visibility:hidden;
+    background-color: rgba(34, 34, 34, 0.6);
+    transition:opacity .2s linear, visibility .1s, width 1s ease-in;
+  }
+  .screen-overlay.show {
+      transition:opacity .5s ease, width 0s;
+      opacity:1;
+      width:100%;
+      visibility:visible;
+  }
+  
+  .offcanvas{
+    width:350px;
+    visibility: hidden;
+    transform:translateX(-100%);
+    transition:all .2s;
+    border-radius:0; 
+    box-shadow: 0 5px 10px rgba(0,0,0, .2);
+    display:block;
+    position: fixed;
+    top: 102;
+    left: 0;
+    height: 90%;
+    z-index: 1200;
+    background-color: #fff;
+  }
+  
+  .offcanvas.offcanvas-right {
+     right: 0;
+     left: auto;
+     transform: translateX(100%); 
+   }
+  
+  .offcanvas.show{
+    visibility: visible;
+      transform: translateX(0);
+      transition: transform .2s;
+  }
+  
+  .offcanvas .btn-close{ position: absolute; right:15px; top:15px; }
+  
+  .bg-light1{
+    background: #f8f9fa!important;
+    color:#000000b5;
+  }
+  .dropdown-menu {
+    left: 100%;
+    top: -132%;
+    width: 200%;
+    height: 800px;
+    overflow-y: scroll;
+  }
+  
+  
+  </style>

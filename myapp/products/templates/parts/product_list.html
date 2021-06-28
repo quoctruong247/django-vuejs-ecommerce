@@ -1,0 +1,43 @@
+<div class="row">
+    {% for p in list_products %}
+    <div class="col-sm-3 col-6 mt-4">
+        <div class="card text-center">
+            <a href="{% url 'product_detail' p.category.slug p.slug %}" class="text-decoration-none"></a>
+                {% if p.thumbnail %}
+                <img src="{{p.get_thumbnail}}" width="80%" height="230" class="rounded">
+                {% endif %}
+            </a>
+
+            <div class="card-body">
+                <div class="card-title" style="font-size: 1rem; color: #1b1e21;">{{ p.title |truncatechars:60}}</div>
+                {#<h5 class="card-title">{{ p.title|truncatechars:30}}</h5>#}
+                <small class="rating text-body text-center"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                        class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></small>
+                {% if p.priceRange != None %}
+                <!-- <pre> {{p.priceRange}}</pre> -->
+                <p>Price<br>
+                    {% for key, value in p.priceRange.items %}
+                    ${{value}} &nbsp;
+                    {% endfor %}
+                </p>
+                <!-- <p>{{p.priceRange}}</p>    -->
+                {% else %}
+                <p class="mt-3">${{p.price}}<br>
+                    {% if p.sale_price %}
+                        <small class="text-center">$<strike>{{ p.sale_price }}</strike></small>
+                    {% else %}
+                    <small class="text-center">&nbsp;</small>
+                    {% endif %}
+                </p>
+                <div class="card-footer text-center">
+                    <button class="btn btn-outline-secondary thumbnail" @click="addToCart({{p.id}})"><i
+                            class="fas fa-cart-plus"></i> <small>Add to cart</small></button>
+                </div>
+                {% endif%}
+            </div>
+
+            
+        </div>
+    </div>
+    {% endfor %}
+</div>
